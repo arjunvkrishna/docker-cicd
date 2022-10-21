@@ -1,0 +1,23 @@
+version: '3.5'
+
+services:
+
+  redis:
+    image: arjunvk/redis:v5
+    hostname: redis
+    environment:
+      - port=6379      
+    # container_name: mysql
+    deploy:
+      placement:
+        constraints: [node.hostname == ip-172-31-27-210]
+        # ports:
+        # - "6379:6379"
+        # volumes:
+        # - /home/ubuntu/image/redis.conf:/etc/redis/redis.conf
+     # - /home/ubuntu/apache/kookxtra/:/var/www/html/
+    networks:
+      - kookxtranetwork
+networks:
+  kookxtranetwork:
+    external: true

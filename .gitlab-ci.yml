@@ -1,0 +1,37 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - echo "Building..."
+    - cd /home/gitlab-runner/builds/_5z1oX8e/0/arjun.vk/docker-automation
+    - pwd
+    - ls -lrt
+    - docker stack deploy -c redis.yaml rediscluster
+    - echo "Build Complete"
+  tags:
+    - docker-be
+  only:
+    - master
+
+deploy:
+  variables:
+    GIT_STRATEGY: none
+   # GIT_CHECKOUT: "false"
+  stage: deploy
+  script:
+    - echo "Starting deployment"
+    - echo "Creating backup of previous build"
+    - docker stack deploy -c redis.yaml rediscluster
+    - pwd
+    - echo "Completed backup of previous build"
+    - echo "Stopping services"
+    - echo "Deployment completed"
+    - docker service ls
+  tags:
+    - docker-be
+  only:
+    - develop
+
